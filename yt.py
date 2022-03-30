@@ -11,11 +11,13 @@ hours_pattern = re.compile(r'(\d+)H') #regular expresion \d is digit H in hours
 minutes_pattern = re.compile(r'(\d+)M') #M in minutes
 seconds_pattern = re.compile(r'(\d+)S') #S in seconds
 
+total_seconds = 0
 nextPageToken = None
 while True:
         pl_request = youtube.playlistItems().list(
                 part='contentDetails',
-                playlistId="PL-osiE80TeTvviVL0pJGX5mZCo7CAvIuf",
+                #playlistId="PL-osiE80TeTvviVL0pJGX5mZCo7CAvIuf",
+                playlistId="PLsifFPg4DahLU-5x5ThJ0p6f69gWQUoO0", #JustinBieber JUSTICE Platlist 43 videos
                 maxResults=50,
                 pageToken = nextPageToken
         )
@@ -50,16 +52,19 @@ while True:
                         minutes = minutes,
                         seconds = seconds
                 ).total_seconds()
-                
 
-                print(video_seconds)
-                print()
+                total_seconds += video_seconds
+                
 
         nextPageToken = pl_response.get('nextPageToken')
 
         if not nextPageToken:
                 break
 
+total_seconds = int(total_seconds)
 
+minutes, seconds = divmod(total_seconds, 60)
+hours, minutes = divmod(minutes, 60)
 
+print(f'{hours}:{minutes}:{seconds}')
         
